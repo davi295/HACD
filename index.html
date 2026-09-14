@@ -6,140 +6,244 @@
   <title>HACD-Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    @font-face {
+      font-family: 'Inter Variable';
+      src: url('fonts/InterVariable.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
     :root {
       color-scheme: dark;
+      --bg-base:    #08090a;
+      --bg-2:       #1c1c1f;
+      --bg-3:       #232326;
+      --text-1:     #f7f8f8;
+      --text-2:     #d0d6e0;
+      --text-3:     #8a8f98;
+      --accent:     #5e6ad2;
+      --accent-h:   #828fff;
+      --border:     #23252a;
+      --border-2:   #34343a;
     }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
     body {
-      background-color: #020617;
-      background-image:
-        linear-gradient(115deg, rgba(15, 23, 42, 0.98) 0%, rgba(8, 47, 73, 0.88) 46%, rgba(30, 27, 75, 0.82) 100%),
-        radial-gradient(circle at 12% 18%, rgba(34, 211, 238, 0.12), transparent 28rem),
-        radial-gradient(circle at 88% 64%, rgba(52, 211, 153, 0.08), transparent 24rem);
-      background-attachment: fixed;
+      margin: 0;
+      background-color: var(--bg-base);
+      color: var(--text-1);
+      font-family: 'Inter Variable', -apple-system, 'system-ui', 'Segoe UI', sans-serif;
+      font-feature-settings: "cv01", "ss03";
+      font-size: 15px;
+      line-height: 1.6;
+      letter-spacing: -0.011em;
     }
 
-    @keyframes phoneFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-14px); }
+    /* Summary arrow reset */
+    details > summary { list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #ffffff1a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ffffff33; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .phone-float {
-      animation: phoneFloat 7s ease-in-out infinite;
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes borderPulse {
+      0%, 100% { border-color: #23252a; }
+      50%       { border-color: #34343a; }
+    }
+
+    .anim-fade-up-1 { animation: fadeUp 0.65s cubic-bezier(0.215,0.61,0.355,1) 0.05s both; }
+    .anim-fade-up-2 { animation: fadeUp 0.65s cubic-bezier(0.215,0.61,0.355,1) 1.3s both; }
+    .anim-fade-up-3 { animation: fadeUp 0.65s cubic-bezier(0.215,0.61,0.355,1) 1.5s both; }
+    .anim-fade-up-4 { animation: fadeUp 0.65s cubic-bezier(0.215,0.61,0.355,1) 0.46s both; }
+
+    /* Word-by-word headline reveal */
+    .hero-word {
+      display: inline-block;
+      opacity: 0;
+      animation: wordReveal 0.75s cubic-bezier(0.215,0.61,0.355,1) both;
+    }
+    @keyframes wordReveal {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .anim-float     { animation: float 6s ease-in-out infinite; }
+    .anim-float-slow{ animation: float 8s ease-in-out 1s infinite; }
+
+    .anim-fade-in   { animation: fadeIn 0.8s ease 0.6s both; }
+
+    /* Stats scroll reveal */
+    .stat-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .stat-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 antialiased">
-  <nav class="fixed left-0 top-0 z-50 w-full border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
-    <div class="container mx-auto flex items-center justify-between px-6 py-4">
-      <a id="logo-home" href="#" class="cursor-pointer text-2xl font-extrabold tracking-tighter text-white" aria-label="HACD-Hub início">
+<body>
+
+  <!-- NAV -->
+  <nav style="position:fixed;top:0;left:0;width:100%;z-index:50;background:rgba(8,9,10,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);">
+    <div style="max-width:1344px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+
+      <a id="logo-home" href="#" aria-label="HACD-Hub início"
+        style="font-size:17px;font-weight:590;letter-spacing:-0.02em;color:var(--text-1);text-decoration:none;cursor:pointer;">
         HACD-Hub
       </a>
 
-      <div class="hidden items-center gap-8 md:flex">
-        <div class="relative">
-          <button id="btn-dropdown-aprender" type="button" class="flex items-center gap-1.5 text-slate-300 hover:text-white font-medium focus:outline-none">
+      <div style="display:flex;align-items:center;gap:32px;">
+
+        <!-- Aprender dropdown -->
+        <div style="position:relative;">
+          <button id="btn-dropdown-aprender" type="button"
+            style="display:flex;align-items:center;gap:5px;font-size:14px;font-weight:400;color:var(--text-3);background:none;border:none;cursor:pointer;padding:0;letter-spacing:-0.01em;transition:color 0.15s;"
+            onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-3)'">
             Aprender
-            <svg class="w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
+            <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="opacity:0.5;">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
             </svg>
           </button>
-          <div id="dropdown-aprender" class="hidden absolute top-full left-0 mt-3 w-72 bg-slate-900 border border-slate-700 p-6 rounded-2xl shadow-2xl z-50 backdrop-blur-xl bg-slate-900/95">
-            <div>
-              <h4 class="mb-3 text-xs font-bold uppercase tracking-widest text-slate-500">POR ÁREA</h4>
-              <div class="space-y-2">
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="aluno" data-filtro="area" data-interesse="Programação">Programação</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="aluno" data-filtro="area" data-interesse="Matemática">Matemática</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="aluno" data-filtro="area" data-interesse="História">História</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="aluno" data-filtro="area" data-interesse="Física">Física</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="aluno" data-filtro="area" data-interesse="Química">Química</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="aluno" data-filtro="area" data-interesse="Design">Design</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="aluno" data-filtro="outras" data-interesse="Outras">Outras</a>
-              </div>
+          <div id="dropdown-aprender" class="hidden"
+            style="position:absolute;top:calc(100% + 12px);left:0;width:220px;background:var(--bg-2);border:1px solid var(--border);border-radius:12px;padding:16px;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+            <p style="font-size:11px;font-weight:590;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-3);margin:0 0 10px;">Por área</p>
+            <div style="display:flex;flex-direction:column;gap:1px;">
+              <a href="#" class="menu-item" data-tipo="aluno" data-filtro="area" data-interesse="Programação" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Programação</a>
+              <a href="#" class="menu-item" data-tipo="aluno" data-filtro="area" data-interesse="Matemática" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Matemática</a>
+              <a href="#" class="menu-item" data-tipo="aluno" data-filtro="area" data-interesse="História" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">História</a>
+              <a href="#" class="menu-item" data-tipo="aluno" data-filtro="area" data-interesse="Física" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Física</a>
+              <a href="#" class="menu-item" data-tipo="aluno" data-filtro="area" data-interesse="Química" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Química</a>
+              <a href="#" class="menu-item" data-tipo="aluno" data-filtro="area" data-interesse="Design" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Design</a>
+              <a href="#" class="menu-item" data-tipo="aluno" data-filtro="outras" data-interesse="Outras" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Outras</a>
             </div>
           </div>
         </div>
 
-        <div class="relative">
-          <button id="btn-dropdown-ensinar" type="button" class="flex items-center gap-1.5 text-slate-300 hover:text-white font-medium focus:outline-none">
+        <!-- Ensinar dropdown -->
+        <div style="position:relative;">
+          <button id="btn-dropdown-ensinar" type="button"
+            style="display:flex;align-items:center;gap:5px;font-size:14px;font-weight:400;color:var(--text-3);background:none;border:none;cursor:pointer;padding:0;letter-spacing:-0.01em;transition:color 0.15s;"
+            onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-3)'">
             Ensinar
-            <svg class="w-4 h-4 transition-transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path>
+            <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="opacity:0.5;">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
             </svg>
           </button>
-          <div id="dropdown-ensinar" class="hidden absolute top-full left-0 mt-3 w-96 bg-slate-900 border border-slate-700 p-6 rounded-2xl shadow-2xl z-50 grid grid-cols-2 gap-6 backdrop-blur-xl bg-slate-900/95">
+          <div id="dropdown-ensinar" class="hidden"
+            style="position:absolute;top:calc(100% + 12px);left:0;width:320px;background:var(--bg-2);border:1px solid var(--border);border-radius:12px;padding:16px;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.4);">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
             <div>
-              <h4 class="mb-3 text-xs font-bold uppercase tracking-widest text-slate-500">POR ÁREA</h4>
-              <div class="space-y-2">
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="area" data-interesse="Programação">Programação</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="area" data-interesse="Matemática">Matemática</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="area" data-interesse="História">História</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="area" data-interesse="Física">Física</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="area" data-interesse="Química">Química</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="area" data-interesse="Design">Design</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="outras" data-interesse="Outras">Outras</a>
+              <p style="font-size:11px;font-weight:590;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-3);margin:0 0 10px;">Por área</p>
+              <div style="display:flex;flex-direction:column;gap:1px;">
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="area" data-interesse="Programação" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Programação</a>
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="area" data-interesse="Matemática" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Matemática</a>
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="area" data-interesse="História" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">História</a>
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="area" data-interesse="Física" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Física</a>
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="area" data-interesse="Química" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Química</a>
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="area" data-interesse="Design" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Design</a>
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="outras" data-interesse="Outras" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Outras</a>
               </div>
             </div>
             <div>
-              <h4 class="mb-3 text-xs font-bold uppercase tracking-widest text-slate-500">POR NÍVEL</h4>
-              <div class="space-y-2">
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="nivel" data-interesse="Iniciante">Iniciante</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="nivel" data-interesse="Médio">Médio</a>
-                <a href="#" class="menu-item block text-slate-400 hover:text-cyan-400 text-sm font-medium transition" data-tipo="professor" data-filtro="nivel" data-interesse="Avançado">Avançado</a>
+              <p style="font-size:11px;font-weight:590;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-3);margin:0 0 10px;">Por nível</p>
+              <div style="display:flex;flex-direction:column;gap:1px;">
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="nivel" data-interesse="Iniciante" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Iniciante</a>
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="nivel" data-interesse="Médio" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Médio</a>
+                <a href="#" class="menu-item" data-tipo="professor" data-filtro="nivel" data-interesse="Avançado" style="display:block;font-size:13px;color:var(--text-2);text-decoration:none;padding:6px 0;transition:color 0.1s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-2)'">Avançado</a>
               </div>
             </div>
+            </div><!-- /grid -->
           </div>
         </div>
+
       </div>
 
-      <div class="flex items-center gap-4">
-        <button id="btn-entrar" class="text-sm font-bold uppercase text-slate-300 transition hover:text-white">
-          ENTRAR
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button id="btn-entrar"
+          style="font-size:13px;font-weight:590;letter-spacing:-0.01em;color:var(--text-3);background:none;border:none;cursor:pointer;padding:6px 10px;transition:color 0.15s;"
+          onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-3)'">
+          Entrar
         </button>
-        <button id="btn-criar-conta" class="rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-2 text-sm font-bold text-white transition hover:scale-105">
-          CRIAR CONTA
+        <button id="btn-criar-conta"
+          style="font-size:13px;font-weight:510;letter-spacing:-0.01em;color:var(--text-1);background:transparent;border:1px solid rgba(255,255,255,0.18);cursor:pointer;padding:6px 16px;border-radius:8px;transition:border-color 0.15s,background 0.15s;"
+          onmouseover="this.style.borderColor='rgba(255,255,255,0.35)';this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='transparent'">
+          Criar conta
         </button>
       </div>
+
     </div>
   </nav>
 
-  <main id="app-content" class="container mx-auto min-h-screen p-6 pt-28"></main>
+  <main id="app-content" style="max-width:1344px;margin:0 auto;padding:0 32px;padding-top:60px;min-height:100vh;"></main>
 
-  <footer class="border-t border-slate-800 bg-slate-950 pt-16 pb-8">
-    <div class="container mx-auto px-6">
-      <div class="mb-16 grid grid-cols-1 gap-12 md:grid-cols-2">
+  <!-- FOOTER -->
+  <footer style="border-top:1px solid var(--border);padding:48px 0 32px;">
+    <div style="max-width:1344px;margin:0 auto;padding:0 32px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-bottom:48px;">
         <div>
-          <a href="#" class="mb-4 block text-2xl font-bold text-white">
-            HACD-<span class="text-blue-400">Hub</span>
+          <a href="#" style="display:block;margin-bottom:12px;font-size:17px;font-weight:590;letter-spacing:-0.02em;color:var(--text-1);text-decoration:none;">
+            HACD-Hub
           </a>
-          <p class="max-w-sm text-slate-400">
+          <p style="max-width:280px;font-size:13px;color:var(--text-3);line-height:1.6;letter-spacing:-0.01em;">
             Conectando alunos e mentores para transformar o aprendizado através da comunidade.
           </p>
         </div>
-
-        <div class="md:text-right">
-          <h4 class="mb-4 text-sm font-bold uppercase tracking-wider text-white">Suporte</h4>
-          <div class="mb-6 flex items-center gap-3 text-slate-300 md:justify-end">
-            <svg class="h-6 w-6 text-emerald-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.12.548 4.148 1.542 5.92L0 24l6.23-1.603c1.71.956 3.67 1.488 5.767 1.488 6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm-3.84 8.273c.12-.266.25-.27.375-.275.125-.005.27-.005.42-.005.15 0 .393.056.598.28.204.224.78.76.78 1.854 0 1.093.524 1.764.598 1.864.075.1.644.982 1.56 1.365.22.09.39.145.525.186.222.07.424.06.584.037.178-.026.546-.223.623-.44.077-.215.077-.4.054-.44-.024-.04-.087-.063-.2-.12-1.127-.563-1.074-.52-1.2-.763-.127-.24-.225-.564-.324-.764z"></path>
+        <div style="text-align:right;">
+          <p style="font-size:11px;font-weight:590;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-3);margin:0 0 14px;">Suporte</p>
+          <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:16px;">
+            <svg style="width:18px;height:18px;color:#25d366;fill:currentColor;" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.12.548 4.148 1.542 5.92L0 24l6.23-1.603c1.71.956 3.67 1.488 5.767 1.488 6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm-3.84 8.273c.12-.266.25-.27.375-.275.125-.005.27-.005.42-.005.15 0 .393.056.598.28.204.224.78.76.78 1.854 0 1.093.524 1.764.598 1.864.075.1.644.982 1.56 1.365.22.09.39.145.525.186.222.07.424.06.584.037.178-.026.546-.223.623-.44.077-.215.077-.4.054-.44-.024-.04-.087-.063-.2-.12-1.127-.563-1.074-.52-1.2-.763-.127-.24-.225-.564-.324-.764z"/>
             </svg>
-            <span class="text-lg font-semibold">(33) 988738953</span>
+            <span style="font-size:15px;font-weight:510;color:var(--text-2);">(33) 988738953</span>
           </div>
-          <a href="https://wa.me/5533988738953" target="_blank" rel="noopener noreferrer" class="inline-block rounded-full bg-emerald-600 px-8 py-3 font-bold text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all hover:scale-105 hover:bg-emerald-500">
+          <a href="https://wa.me/5533988738953" target="_blank" rel="noopener noreferrer"
+            style="display:inline-block;font-size:13px;font-weight:590;color:#fff;background:#25d366;padding:8px 20px;border-radius:8px;text-decoration:none;letter-spacing:-0.01em;transition:opacity 0.15s;"
+            onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
             Fale Conosco
           </a>
         </div>
       </div>
-
-      <div class="mb-8 h-px w-full bg-slate-800"></div>
-
-      <div class="text-center text-sm text-slate-500">
-        &copy; 2024 HACD-Hub. Todos os direitos reservados.
+      <div style="border-top:1px solid var(--border);padding-top:24px;text-align:center;">
+        <p style="font-size:12px;color:var(--text-3);letter-spacing:-0.005em;">© 2024 HACD-Hub. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/controllers/appController.js"></script>
+  <script type="module" src="js/controllers/appController.js?v=5"></script>
 </body>
 </html>
