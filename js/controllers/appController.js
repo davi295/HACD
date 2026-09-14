@@ -1,6 +1,6 @@
 import { renderHome } from '../views/homeView.js';
-import { renderAluno, renderProfessor, renderArtigo, renderPublicarConteudo } from '../views/alunoView.js';
-import { renderCadastro, renderLogin, renderRecuperarSenha } from '../views/cadastroView.js';
+import { renderAluno, renderProfessor, renderArtigo, renderPublicarConteudo } from '../views/alunoView.js?v=3';
+import { renderCadastro, renderLogin, renderRecuperarSenha } from '../views/cadastroView.js?v=2';
 import {
   AREAS_PRINCIPAIS,
   carregarDados,
@@ -53,7 +53,7 @@ export function navegarPara(pagina, params = {}) {
     case 'cadastro': appContent.innerHTML = renderCadastro(params.tipo, params.interesse); break;
     case 'aluno': { const dados = filtrarAluno(); appContent.innerHTML = renderAluno(dados.conteudos, dados.mentores, getSessao()); break; }
     case 'professor': appContent.innerHTML = renderProfessor(filtrarProfessor(), getSessao(), getConteudos().filter((item) => item.professor_id === getSessao()?.id || item.autor === getSessao()?.nome)); break;
-    case 'conteudo': appContent.innerHTML = renderArtigo(params.id, getConteudos()); break;
+    case 'conteudo': appContent.innerHTML = renderArtigo(params.id, getConteudos(), getSessao()); break;
     case 'publicar-artigo': appContent.innerHTML = renderPublicarConteudo(getSessao()); break;
     default: appContent.innerHTML = renderHome();
   }
@@ -66,8 +66,8 @@ function atualizarHeaderUsuario() {
   const entrar = document.getElementById('btn-entrar');
   const criar = document.getElementById('btn-criar-conta');
   if (!entrar || !criar) return;
-  entrar.textContent = usuario ? 'SAIR' : 'ENTRAR';
-  criar.textContent = usuario ? `PAINEL ${usuario.tipo === 'aluno' ? 'ALUNO' : 'PROFESSOR'}` : 'CRIAR CONTA';
+  entrar.textContent = usuario ? 'Sair' : 'Entrar';
+  criar.textContent = usuario ? `Painel ${usuario.tipo === 'aluno' ? 'Aluno' : 'Professor'}` : 'Criar conta';
 }
 
 function aplicarParallax() {
