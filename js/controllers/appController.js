@@ -1,6 +1,6 @@
-import { renderHome } from '../views/homeView.js';
-import { renderAluno, renderProfessor, renderArtigo, renderPublicarConteudo } from '../views/alunoView.js?v=3';
-import { renderCadastro, renderLogin, renderRecuperarSenha } from '../views/cadastroView.js?v=2';
+import { renderHome } from '../views/homeView.js?v=2';
+import { renderAluno, renderProfessor, renderArtigo, renderPublicarConteudo } from '../views/alunoView.js?v=4';
+import { renderCadastro, renderLogin, renderRecuperarSenha } from '../views/cadastroView.js?v=3';
 import {
   AREAS_PRINCIPAIS,
   carregarDados,
@@ -59,15 +59,16 @@ export function navegarPara(pagina, params = {}) {
   }
   atualizarHeaderUsuario();
   aplicarParallax();
+  fecharMenuMobile();
+  window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
 function atualizarHeaderUsuario() {
   const usuario = getSessao();
-  const entrar = document.getElementById('btn-entrar');
-  const criar = document.getElementById('btn-criar-conta');
-  if (!entrar || !criar) return;
-  entrar.textContent = usuario ? 'Sair' : 'Entrar';
-  criar.textContent = usuario ? `Painel ${usuario.tipo === 'aluno' ? 'Aluno' : 'Professor'}` : 'Criar conta';
+  const rotuloEntrar = usuario ? 'Sair' : 'Entrar';
+  const rotuloCriar = usuario ? `Painel ${usuario.tipo === 'aluno' ? 'Aluno' : 'Professor'}` : 'Criar conta';
+  document.querySelectorAll('[data-acao="entrar"]').forEach((botao) => { botao.textContent = rotuloEntrar; });
+  document.querySelectorAll('[data-acao="criar-conta"]').forEach((botao) => { botao.textContent = rotuloCriar; });
 }
 
 function aplicarParallax() {
@@ -86,16 +87,62 @@ document.addEventListener('mousemove', (event) => {
 });
 
 document.getElementById('logo-home').addEventListener('click', (event) => { event.preventDefault(); navegarPara('home'); });
-document.getElementById('btn-entrar').addEventListener('click', () => {
+
+document.querySelectorAll('[data-acao="entrar"]').forEach((botao) => botao.addEventListener('click', () => {
   if (getSessao()) { setSessao(null); exibirMensagem('Você saiu da plataforma.', 'info'); navegarPara('home'); } else navegarPara('login');
+}));
+document.querySelectorAll('[data-acao="criar-conta"]').forEach((botao) =>
+  botao.addEventListener('click', () => navegarPara(getSessao() ? getSessao().tipo : 'cadastro')));
+
+/* ── Menu mobile ── */
+const btnMenuMobile = document.getElementById('btn-menu-mobile');
+const menuMobile = document.getElementById('mobile-menu');
+
+function recolherAcordeoes() {
+  menuMobile.querySelectorAll('.m-row').forEach((linha) => linha.setAttribute('aria-expanded', 'false'));
+  menuMobile.querySelectorAll('.m-panel').forEach((painel) => painel.classList.remove('is-open'));
+}
+
+function menuMobileAberto() {
+  return btnMenuMobile.getAttribute('aria-expanded') === 'true';
+}
+
+function abrirMenuMobile() {
+  menuMobile.classList.add('is-mounted');
+  requestAnimationFrame(() => menuMobile.classList.add('is-open'));
+  btnMenuMobile.setAttribute('aria-expanded', 'true');
+  btnMenuMobile.setAttribute('aria-label', 'Fechar menu');
+  document.body.classList.add('menu-aberto');
+}
+
+function fecharMenuMobile() {
+  if (!menuMobile || !menuMobileAberto()) return;
+  menuMobile.classList.remove('is-open');
+  btnMenuMobile.setAttribute('aria-expanded', 'false');
+  btnMenuMobile.setAttribute('aria-label', 'Abrir menu');
+  document.body.classList.remove('menu-aberto');
+  window.setTimeout(() => { if (!menuMobileAberto()) { menuMobile.classList.remove('is-mounted'); recolherAcordeoes(); } }, 260);
+}
+
+btnMenuMobile.addEventListener('click', () => { menuMobileAberto() ? fecharMenuMobile() : abrirMenuMobile(); });
+
+menuMobile.addEventListener('click', (event) => {
+  const linha = event.target.closest('.m-row');
+  if (!linha) return;
+  const painel = document.getElementById(linha.dataset.acordeao);
+  const aberto = linha.getAttribute('aria-expanded') === 'true';
+  recolherAcordeoes();
+  if (!aberto) { linha.setAttribute('aria-expanded', 'true'); painel.classList.add('is-open'); }
 });
-document.getElementById('btn-criar-conta').addEventListener('click', () => navegarPara(getSessao() ? getSessao().tipo : 'cadastro'));
+
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') fecharMenuMobile(); });
+window.addEventListener('resize', () => { if (window.innerWidth > 768) fecharMenuMobile(); });
 
 const btnAprender = document.getElementById('btn-dropdown-aprender');
 const btnEnsinar = document.getElementById('btn-dropdown-ensinar');
 const menuAprender = document.getElementById('dropdown-aprender');
 const menuEnsinar = document.getElementById('dropdown-ensinar');
-function fecharDropdowns() { menuAprender.classList.add('hidden'); menuEnsinar.classList.add('hidden'); }
+function fecharDropdowns() { menuAprender.classList.add('hidden'); menuEnsinar.classList.add('hidden'); fecharMenuMobile(); }
 btnAprender.addEventListener('click', (event) => { event.stopPropagation(); menuAprender.classList.toggle('hidden'); menuEnsinar.classList.add('hidden'); });
 btnEnsinar.addEventListener('click', (event) => { event.stopPropagation(); menuEnsinar.classList.toggle('hidden'); menuAprender.classList.add('hidden'); });
 
@@ -113,6 +160,7 @@ document.addEventListener('click', (event) => {
     else { usuario.filtroProfessorTipo = filtro; usuario.nivelFiltro = filtro === 'nivel' ? interesse : usuario.nivelFiltro; usuario.especialidade = filtro === 'outras' ? 'Outras' : filtro === 'area' ? interesse : usuario.especialidade; navegarPara('professor'); }
     return;
   }
+  if (menuMobile.contains(event.target) || btnMenuMobile.contains(event.target)) return;
   if (!menuAprender.contains(event.target) && !menuEnsinar.contains(event.target) && !btnAprender.contains(event.target) && !btnEnsinar.contains(event.target)) fecharDropdowns();
 });
 

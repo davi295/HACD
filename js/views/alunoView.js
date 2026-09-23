@@ -40,15 +40,15 @@ export function renderAluno(conteudos = [], mentores = [], usuario = null) {
     : `<p style="font-size:14px;color:var(--text-3);grid-column:1/-1;">Nenhum mentor encontrado para este filtro.</p>`;
 
   return `
-    <section style="padding:40px 0 80px;">
+    <section class="panel-section" style="padding:40px 0 80px;">
       ${header}
       <div style="margin-bottom:48px;">
         <h2 style="font-size:18px;font-weight:510;letter-spacing:-0.018em;color:var(--text-1);margin:0 0 20px;">Conteúdos recomendados</h2>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">${conteudoCards}</div>
+        <div class="card-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">${conteudoCards}</div>
       </div>
       <div style="border-top:1px solid var(--border);padding-top:48px;">
         <h2 style="font-size:18px;font-weight:510;letter-spacing:-0.018em;color:var(--text-1);margin:0 0 20px;">Mentores disponíveis</h2>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">${mentorCards}</div>
+        <div class="card-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">${mentorCards}</div>
       </div>
     </section>`;
 }
@@ -82,7 +82,7 @@ export function renderProfessor(alunos = [], usuario = null, artigos = []) {
     : `<p style="font-size:14px;color:var(--text-3);grid-column:1/-1;">Nenhum aluno encontrado para este filtro.</p>`;
 
   return `
-    <section style="padding:40px 0 80px;">
+    <section class="panel-section" style="padding:40px 0 80px;">
       ${header}
       <div style="margin-bottom:32px;">
         <button data-page="publicar-artigo" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:510;letter-spacing:-0.01em;color:var(--text-1);background:var(--bg-2);border:1px solid var(--border);cursor:pointer;padding:8px 16px;border-radius:8px;font-family:inherit;transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--border-2)'" onmouseout="this.style.borderColor='var(--border)'">
@@ -91,11 +91,11 @@ export function renderProfessor(alunos = [], usuario = null, artigos = []) {
       </div>
       <div style="margin-bottom:48px;">
         <h2 style="font-size:18px;font-weight:510;letter-spacing:-0.018em;color:var(--text-1);margin:0 0 20px;">Meus artigos</h2>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">${artigoCards}</div>
+        <div class="card-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">${artigoCards}</div>
       </div>
       <div style="border-top:1px solid var(--border);padding-top:48px;">
         <h2 style="font-size:18px;font-weight:510;letter-spacing:-0.018em;color:var(--text-1);margin:0 0 20px;">Alunos aguardando mentoria</h2>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">${alunoCards}</div>
+        <div class="card-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;">${alunoCards}</div>
       </div>
     </section>`;
 }
@@ -105,7 +105,7 @@ export function renderArtigo(id, conteudos = [], usuario = null) {
   if (!item) return `<section style="padding:80px 0;color:var(--text-3);font-size:14px;">Conteúdo não encontrado.</section>`;
   const backPage = usuario?.tipo === 'professor' ? 'professor' : 'aluno';
   return `
-    <article style="max-width:680px;margin:0 auto;padding:60px 0 80px;">
+    <article class="artigo-wrap" style="max-width:680px;margin:0 auto;padding:60px 0 80px;">
       <button data-page="${backPage}" style="display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--text-3);background:none;border:none;cursor:pointer;padding:0;font-family:inherit;letter-spacing:-0.01em;margin-bottom:32px;transition:color 0.15s;" onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-3)'">← Voltar</button>
       <span style="font-size:11px;color:var(--text-3);letter-spacing:0.06em;font-family:ui-monospace,monospace;">${item.area}</span>
       <h1 style="font-size:clamp(24px,3vw,36px);font-weight:510;letter-spacing:-0.022em;line-height:1.1;color:var(--text-1);margin:12px 0 8px;">${item.titulo}</h1>
@@ -118,8 +118,8 @@ export function renderArtigo(id, conteudos = [], usuario = null) {
 
 export function renderPublicarConteudo(usuario) {
   return `
-    <div style="display:flex;justify-content:center;padding:80px 0;">
-      <section style="max-width:540px;width:100%;background:var(--bg-2);border:1px solid var(--border);border-radius:12px;padding:40px;">
+    <div class="auth-wrap" style="display:flex;justify-content:center;padding:80px 0;">
+      <section class="auth-card" style="max-width:540px;width:100%;background:var(--bg-2);border:1px solid var(--border);border-radius:12px;padding:40px;">
         <h1 style="font-size:20px;font-weight:510;letter-spacing:-0.02em;color:var(--text-1);margin:0 0 6px;">Escrever artigo</h1>
         <p style="font-size:13px;color:var(--text-3);letter-spacing:-0.01em;margin:0 0 28px;">Compartilhe seu conhecimento com a comunidade.</p>
         <form id="form-conteudo" style="display:flex;flex-direction:column;gap:16px;">

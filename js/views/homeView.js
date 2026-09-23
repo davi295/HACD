@@ -11,7 +11,7 @@ export function renderHome() {
     <section>
 
       <!-- HERO -->
-      <div style="
+      <div class="hero" style="
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 48px;
@@ -21,7 +21,7 @@ export function renderHome() {
       ">
         <!-- Left: text -->
         <div>
-          <h1 style="
+          <h1 class="hero-title" style="
             font-size: clamp(36px, 5vw, 68px);
             font-weight: 510;
             line-height: 1.04;
@@ -30,7 +30,7 @@ export function renderHome() {
             margin: 0 0 24px;
           "><span class="hero-word" style="animation-delay:0.05s">Aprenda</span> <span class="hero-word" style="animation-delay:0.20s">com</span> <span class="hero-word" style="animation-delay:0.38s">pessoas</span> <span class="hero-word" style="animation-delay:0.56s">da</span> <span class="hero-word" style="animation-delay:0.72s">sua</span> <span class="hero-word" style="animation-delay:0.88s">comunidade.</span></h1>
 
-          <p class="anim-fade-up-2" style="
+          <p class="anim-fade-up-2 hero-sub" style="
             max-width: 420px;
             font-size: 16px;
             line-height: 1.65;
@@ -40,7 +40,7 @@ export function renderHome() {
             font-weight: 400;
           ">O HACD-Hub aproxima alunos e professores numa experiência direta: encontre uma área, leia conteúdos, peça mentoria e avance com apoio real.</p>
 
-          <div class="anim-fade-up-3" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <div class="anim-fade-up-3 hero-actions" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
             <button data-page="aluno"
               style="font-size:14px;font-weight:590;letter-spacing:-0.01em;color:#08090a;background:#f7f8f8;border:none;cursor:pointer;padding:9px 18px;border-radius:8px;transition:background 0.15s;"
               onmouseover="this.style.background='#fff'" onmouseout="this.style.background='#f7f8f8'">
@@ -55,7 +55,7 @@ export function renderHome() {
         </div>
 
         <!-- Right: Linear hero image -->
-        <div class="anim-fade-in" style="display:flex;justify-content:center;align-items:center;position:relative;">
+        <div class="anim-fade-in hero-art" style="display:flex;justify-content:center;align-items:center;position:relative;">
           <img
             src="images/linear-hero-1.webp"
             class="anim-float"
@@ -71,6 +71,7 @@ export function renderHome() {
           >
           <img
             src="images/linear-hero-2.webp"
+            class="hero-art-2"
             alt=""
             style="
               position: absolute;
@@ -87,8 +88,8 @@ export function renderHome() {
       </div>
 
       <!-- FIGURES -->
-      <div style="padding:0 0 80px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+      <div class="figs-section" style="padding:0 0 80px;">
+        <div class="figs" style="display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:16px;overflow:hidden;">
 
           <!-- FIG 0.2 – cube cluster -->
           <div class="iso-fig" style="padding:48px 40px;border-right:1px solid var(--border);cursor:crosshair;display:flex;flex-direction:column;">
@@ -168,7 +169,7 @@ export function renderHome() {
         </div>
 
         <!-- Text below figures -->
-        <div style="padding:56px 0 0;max-width:560px;margin:0 auto;text-align:center;">
+        <div class="figs-copy" style="padding:56px 0 0;max-width:560px;margin:0 auto;text-align:center;">
           <h2 style="font-size:clamp(22px,2.5vw,30px);font-weight:510;line-height:1.15;letter-spacing:-0.02em;color:var(--text-1);margin:0 0 12px;">
             Conhecimento que cresce com a comunidade.
           </h2>
@@ -213,8 +214,8 @@ export function renderHome() {
       </script>
 
       <!-- STATS -->
-      <div style="border-top: 1px solid var(--border); padding: 48px 0 64px;">
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;">
+      <div class="stats-wrap" style="border-top: 1px solid var(--border); padding: 48px 0 64px;">
+        <div class="stats-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;">
           <div class="stat-item">
             <p style="font-size:clamp(28px,3.5vw,42px);font-weight:680;color:var(--text-1);line-height:1;letter-spacing:-0.022em;margin:0 0 8px;">14% ao ano</p>
             <p style="font-size:13px;color:var(--text-3);line-height:1.5;letter-spacing:-0.01em;margin:0;">Crescimento do e-learning global</p>
@@ -231,7 +232,7 @@ export function renderHome() {
       </div>
 
       <!-- ABOUT -->
-      <section style="border-top: 1px solid var(--border); padding: 64px 0;">
+      <section class="about-section" style="border-top: 1px solid var(--border); padding: 64px 0;">
         <div style="max-width: 600px;">
           <h2 style="font-size:clamp(26px,3vw,38px);font-weight:510;line-height:1.1;letter-spacing:-0.022em;color:var(--text-1);margin:0 0 20px;">
             Construindo o ponto de encontro para o futuro da educação digital.
@@ -246,8 +247,8 @@ export function renderHome() {
       </section>
 
       <!-- CTA SPLIT -->
-      <div style="border-top: 1px solid var(--border); padding: 72px 0; display: grid; grid-template-columns: 1fr 1fr;">
-        <div style="padding-right: 56px; border-right: 1px solid var(--border);">
+      <div class="cta-split" style="border-top: 1px solid var(--border); padding: 72px 0; display: grid; grid-template-columns: 1fr 1fr;">
+        <div class="cta-col-1" style="padding-right: 56px; border-right: 1px solid var(--border);">
           <p style="margin:0 0 20px;font-size:11px;color:var(--text-3);letter-spacing:0.06em;font-family:ui-monospace,monospace;">Para alunos</p>
           <h2 style="font-size:clamp(20px,2.2vw,26px);font-weight:510;letter-spacing:-0.02em;line-height:1.15;color:var(--text-1);margin:0 0 14px;">Aprenda com quem já percorreu o caminho.</h2>
           <p style="font-size:14px;color:var(--text-3);line-height:1.65;letter-spacing:-0.01em;margin:0 0 32px;">Encontre professores, leia artigos e peça mentoria na área que você quer dominar.</p>
@@ -258,7 +259,7 @@ export function renderHome() {
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </div>
-        <div style="padding-left: 56px;">
+        <div class="cta-col-2" style="padding-left: 56px;">
           <p style="margin:0 0 20px;font-size:11px;color:var(--text-3);letter-spacing:0.06em;font-family:ui-monospace,monospace;">Para professores</p>
           <h2 style="font-size:clamp(20px,2.2vw,26px);font-weight:510;letter-spacing:-0.02em;line-height:1.15;color:var(--text-1);margin:0 0 14px;">Compartilhe o que você sabe.</h2>
           <p style="font-size:14px;color:var(--text-3);line-height:1.65;letter-spacing:-0.01em;margin:0 0 32px;">Publique artigos, defina sua especialidade e conecte-se com alunos motivados.</p>
@@ -272,9 +273,9 @@ export function renderHome() {
       </div>
 
       <!-- FAQ -->
-      <section style="border-top: 1px solid var(--border); padding: 64px 0 80px;">
-        <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; align-items: start;">
-          <div style="position: sticky; top: 80px;">
+      <section class="faq-section" style="border-top: 1px solid var(--border); padding: 64px 0 80px;">
+        <div class="faq-grid" style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 64px; align-items: start;">
+          <div class="faq-aside" style="position: sticky; top: 80px;">
             <h2 style="font-size:clamp(24px,2.8vw,34px);font-weight:510;line-height:1.1;letter-spacing:-0.022em;color:var(--text-1);margin:0 0 14px;">
               Tudo começa com uma boa pergunta.
             </h2>
@@ -287,7 +288,7 @@ export function renderHome() {
               <details ${i === 0 ? 'open' : ''}
                 style="border: 1px solid var(--border); border-radius: 10px; background: var(--bg-2); overflow: hidden; transition: border-color 0.15s;"
                 onmouseover="this.style.borderColor='var(--border-2)'" onmouseout="this.style.borderColor='var(--border)'">
-                <summary style="
+                <summary class="faq-summary" style="
                   display: flex;
                   align-items: center;
                   justify-content: space-between;

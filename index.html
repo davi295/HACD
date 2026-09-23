@@ -2,7 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#08090a">
   <title>HACD-Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -26,6 +27,7 @@
       --accent-h:   #828fff;
       --border:     #23252a;
       --border-2:   #34343a;
+      --nav-h:      60px;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -41,6 +43,8 @@
       font-size: 15px;
       line-height: 1.6;
       letter-spacing: -0.011em;
+      overflow-x: clip;
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* Summary arrow reset */
@@ -106,6 +110,223 @@
       transform: translateY(0);
     }
 
+    /* ─────────────────────────────────────────────
+       NAV — gatilho mobile + menu deslizante
+       ───────────────────────────────────────────── */
+
+    .nav-burger {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      padding: 0;
+      color: var(--text-1);
+      background: transparent;
+      border: 1px solid var(--border-2);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .nav-burger:active { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.3); }
+
+    .burger-lines { position: relative; width: 16px; height: 11px; }
+    .burger-lines span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 1.5px;
+      border-radius: 2px;
+      background: currentColor;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.18s ease;
+    }
+    .burger-lines span:nth-child(1) { top: 0; }
+    .burger-lines span:nth-child(2) { top: 4.75px; }
+    .burger-lines span:nth-child(3) { top: 9.5px; }
+    .nav-burger[aria-expanded="true"] .burger-lines span:nth-child(1) { transform: translateY(4.75px) rotate(45deg); }
+    .nav-burger[aria-expanded="true"] .burger-lines span:nth-child(2) { opacity: 0; transform: scaleX(0.4); }
+    .nav-burger[aria-expanded="true"] .burger-lines span:nth-child(3) { transform: translateY(-4.75px) rotate(-45deg); }
+
+    #mobile-menu {
+      position: fixed;
+      top: var(--nav-h);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 49;
+      display: none;
+      flex-direction: column;
+      padding: 4px 20px calc(32px + env(safe-area-inset-bottom));
+      background: var(--bg-base);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.22s ease, transform 0.26s cubic-bezier(0.215,0.61,0.355,1);
+    }
+    #mobile-menu.is-mounted { display: flex; }
+    #mobile-menu.is-open    { opacity: 1; transform: translateY(0); }
+
+    .m-group { border-bottom: 1px solid var(--border); }
+
+    .m-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 17px 2px;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 510;
+      letter-spacing: -0.018em;
+      line-height: 1.2;
+      color: var(--text-1);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+    }
+    .m-row svg { flex-shrink: 0; opacity: 0.45; transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), opacity 0.2s; }
+    .m-row[aria-expanded="true"] svg { transform: rotate(180deg); opacity: 0.85; }
+
+    .m-panel {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.32s cubic-bezier(0.4,0,0.2,1);
+    }
+    .m-panel.is-open { max-height: 620px; }
+
+    .m-panel-inner { display: flex; flex-direction: column; padding: 0 2px 14px; }
+
+    .m-cap {
+      margin: 8px 0 2px;
+      font-family: ui-monospace, monospace;
+      font-size: 11px;
+      font-weight: 590;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .m-link {
+      display: block;
+      padding: 11px 0;
+      font-size: 15px;
+      letter-spacing: -0.011em;
+      color: var(--text-2);
+      text-decoration: none;
+      transition: color 0.12s, padding-left 0.18s ease;
+    }
+    .m-link:active { color: var(--text-1); padding-left: 5px; }
+
+    .m-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; }
+
+    .m-btn {
+      width: 100%;
+      padding: 13px 0;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 510;
+      letter-spacing: -0.01em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .m-btn-ghost   { color: var(--text-1); background: transparent; border: 1px solid var(--border-2); }
+    .m-btn-ghost:active { background: rgba(255,255,255,0.05); }
+    .m-btn-primary { color: #08090a; background: var(--text-1); border: 1px solid var(--text-1); }
+    .m-btn-primary:active { background: #fff; }
+
+    body.menu-aberto { overflow: hidden; }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVO — tablet e abaixo
+       ───────────────────────────────────────────── */
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr !important;
+        gap: 44px !important;
+        padding: 56px 0 64px !important;
+        min-height: auto !important;
+      }
+      .hero-art img { max-width: 420px !important; }
+
+      .figs { grid-template-columns: 1fr !important; }
+      .figs > .iso-fig:first-child {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border) !important;
+      }
+
+      .stats-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
+
+      .cta-split { grid-template-columns: 1fr !important; }
+      .cta-col-1 { padding-right: 0 !important; border-right: none !important; padding-bottom: 40px !important; }
+      .cta-col-2 { padding-left: 0 !important; padding-top: 40px !important; border-top: 1px solid var(--border) !important; }
+
+      .faq-grid  { grid-template-columns: 1fr !important; gap: 32px !important; }
+      .faq-aside { position: static !important; }
+
+      .footer-grid    { grid-template-columns: 1fr !important; gap: 36px !important; }
+      .footer-support { text-align: left !important; }
+      .footer-support .footer-phone { justify-content: flex-start !important; }
+
+      .card-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important; }
+    }
+
+    /* ─────────────────────────────────────────────
+       RESPONSIVO — mobile
+       ───────────────────────────────────────────── */
+
+    @media (max-width: 768px) {
+      :root { --nav-h: 56px; }
+
+      .nav-inner   { height: 56px !important; padding: 0 20px !important; }
+      .nav-links,
+      .nav-actions { display: none !important; }
+      .nav-burger  { display: inline-flex; }
+
+      #app-content  { padding: 56px 20px 0 !important; }
+      .footer-inner { padding: 0 20px !important; }
+      footer        { padding: 40px 0 calc(28px + env(safe-area-inset-bottom)) !important; }
+
+      .hero { padding: 44px 0 56px !important; gap: 40px !important; }
+      .hero-title { font-size: clamp(32px, 8.6vw, 44px) !important; margin-bottom: 20px !important; }
+      .hero-sub   { font-size: 15px !important; margin-bottom: 32px !important; }
+      .hero-actions { display: grid !important; grid-template-columns: 1fr 1fr; gap: 10px !important; }
+      .hero-actions button { padding: 12px 10px !important; font-size: 14px !important; }
+      /* A arte do hero usa mix-blend-mode sobre imagens escuras: no celular
+         vira um borrão quase invisível ocupando 250px. Melhor esconder. */
+      .hero-art { display: none !important; }
+
+      .iso-fig      { padding: 36px 22px !important; }
+      .figs-section { padding-bottom: 56px !important; }
+      .figs-copy    { padding-top: 40px !important; }
+
+      .stats-wrap    { padding: 40px 0 48px !important; }
+      .about-section { padding: 48px 0 !important; }
+      .cta-split     { padding: 56px 0 !important; }
+      .faq-section   { padding: 48px 0 64px !important; }
+
+      .faq-summary { padding: 15px 16px !important; }
+
+      .card-grid     { grid-template-columns: 1fr !important; gap: 10px !important; }
+      .panel-section { padding: 28px 0 64px !important; }
+
+      .auth-wrap { padding: 40px 0 64px !important; }
+      .auth-card { padding: 28px 22px !important; border-radius: 14px !important; }
+
+      /* Abaixo de 16px o Safari do iPhone dá zoom sozinho ao focar o campo. */
+      input, select, textarea { font-size: 16px !important; }
+
+      .artigo-wrap { padding: 36px 0 64px !important; }
+    }
+
+    @media (max-width: 380px) {
+      .hero-actions { grid-template-columns: 1fr !important; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -119,14 +340,14 @@
 
   <!-- NAV -->
   <nav style="position:fixed;top:0;left:0;width:100%;z-index:50;background:rgba(8,9,10,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);">
-    <div style="max-width:1344px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+    <div class="nav-inner" style="max-width:1344px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;">
 
       <a id="logo-home" href="#" aria-label="HACD-Hub início"
         style="font-size:17px;font-weight:590;letter-spacing:-0.02em;color:var(--text-1);text-decoration:none;cursor:pointer;">
         HACD-Hub
       </a>
 
-      <div style="display:flex;align-items:center;gap:32px;">
+      <div class="nav-links" style="display:flex;align-items:center;gap:32px;">
 
         <!-- Aprender dropdown -->
         <div style="position:relative;">
@@ -192,28 +413,90 @@
 
       </div>
 
-      <div style="display:flex;align-items:center;gap:12px;">
-        <button id="btn-entrar"
+      <div class="nav-actions" style="display:flex;align-items:center;gap:12px;">
+        <button id="btn-entrar" data-acao="entrar"
           style="font-size:13px;font-weight:590;letter-spacing:-0.01em;color:var(--text-3);background:none;border:none;cursor:pointer;padding:6px 10px;transition:color 0.15s;"
           onmouseover="this.style.color='var(--text-1)'" onmouseout="this.style.color='var(--text-3)'">
           Entrar
         </button>
-        <button id="btn-criar-conta"
+        <button id="btn-criar-conta" data-acao="criar-conta"
           style="font-size:13px;font-weight:510;letter-spacing:-0.01em;color:var(--text-1);background:transparent;border:1px solid rgba(255,255,255,0.18);cursor:pointer;padding:6px 16px;border-radius:8px;transition:border-color 0.15s,background 0.15s;"
           onmouseover="this.style.borderColor='rgba(255,255,255,0.35)';this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.18)';this.style.background='transparent'">
           Criar conta
         </button>
       </div>
 
+      <!-- Gatilho do menu mobile -->
+      <button id="btn-menu-mobile" class="nav-burger" type="button"
+        aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="burger-lines" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+
     </div>
   </nav>
+
+  <!-- MENU MOBILE -->
+  <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+
+    <div class="m-group">
+      <button class="m-row" type="button" aria-expanded="false" aria-controls="m-panel-aprender" data-acordeao="m-panel-aprender">
+        Aprender
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+      <div class="m-panel" id="m-panel-aprender">
+        <div class="m-panel-inner">
+          <p class="m-cap">Por área</p>
+          <a href="#" class="menu-item m-link" data-tipo="aluno" data-filtro="area" data-interesse="Programação">Programação</a>
+          <a href="#" class="menu-item m-link" data-tipo="aluno" data-filtro="area" data-interesse="Matemática">Matemática</a>
+          <a href="#" class="menu-item m-link" data-tipo="aluno" data-filtro="area" data-interesse="História">História</a>
+          <a href="#" class="menu-item m-link" data-tipo="aluno" data-filtro="area" data-interesse="Física">Física</a>
+          <a href="#" class="menu-item m-link" data-tipo="aluno" data-filtro="area" data-interesse="Química">Química</a>
+          <a href="#" class="menu-item m-link" data-tipo="aluno" data-filtro="area" data-interesse="Design">Design</a>
+          <a href="#" class="menu-item m-link" data-tipo="aluno" data-filtro="outras" data-interesse="Outras">Outras</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-group">
+      <button class="m-row" type="button" aria-expanded="false" aria-controls="m-panel-ensinar" data-acordeao="m-panel-ensinar">
+        Ensinar
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+      <div class="m-panel" id="m-panel-ensinar">
+        <div class="m-panel-inner">
+          <p class="m-cap">Por área</p>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="area" data-interesse="Programação">Programação</a>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="area" data-interesse="Matemática">Matemática</a>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="area" data-interesse="História">História</a>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="area" data-interesse="Física">Física</a>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="area" data-interesse="Química">Química</a>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="area" data-interesse="Design">Design</a>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="outras" data-interesse="Outras">Outras</a>
+          <p class="m-cap">Por nível</p>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="nivel" data-interesse="Iniciante">Iniciante</a>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="nivel" data-interesse="Médio">Médio</a>
+          <a href="#" class="menu-item m-link" data-tipo="professor" data-filtro="nivel" data-interesse="Avançado">Avançado</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-actions">
+      <button id="btn-criar-conta-mobile" data-acao="criar-conta" type="button" class="m-btn m-btn-primary">Criar conta</button>
+      <button id="btn-entrar-mobile" data-acao="entrar" type="button" class="m-btn m-btn-ghost">Entrar</button>
+    </div>
+
+  </div>
 
   <main id="app-content" style="max-width:1344px;margin:0 auto;padding:0 32px;padding-top:60px;min-height:100vh;"></main>
 
   <!-- FOOTER -->
   <footer style="border-top:1px solid var(--border);padding:48px 0 32px;">
-    <div style="max-width:1344px;margin:0 auto;padding:0 32px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-bottom:48px;">
+    <div class="footer-inner" style="max-width:1344px;margin:0 auto;padding:0 32px;">
+      <div class="footer-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-bottom:48px;">
         <div>
           <a href="#" style="display:block;margin-bottom:12px;font-size:17px;font-weight:590;letter-spacing:-0.02em;color:var(--text-1);text-decoration:none;">
             HACD-Hub
@@ -222,16 +505,16 @@
             Conectando alunos e mentores para transformar o aprendizado através da comunidade.
           </p>
         </div>
-        <div style="text-align:right;">
+        <div class="footer-support" style="text-align:right;">
           <p style="font-size:11px;font-weight:590;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-3);margin:0 0 14px;">Suporte</p>
-          <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:16px;">
-            <svg style="width:18px;height:18px;color:#25d366;fill:currentColor;" viewBox="0 0 24 24" aria-hidden="true">
+          <div class="footer-phone" style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-bottom:16px;">
+            <svg style="width:18px;height:18px;color:#25d366;fill:currentColor;flex-shrink:0;" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12.031 0C5.385 0 0 5.385 0 12.031c0 2.12.548 4.148 1.542 5.92L0 24l6.23-1.603c1.71.956 3.67 1.488 5.767 1.488 6.646 0 12.031-5.385 12.031-12.031S18.677 0 12.031 0zm-3.84 8.273c.12-.266.25-.27.375-.275.125-.005.27-.005.42-.005.15 0 .393.056.598.28.204.224.78.76.78 1.854 0 1.093.524 1.764.598 1.864.075.1.644.982 1.56 1.365.22.09.39.145.525.186.222.07.424.06.584.037.178-.026.546-.223.623-.44.077-.215.077-.4.054-.44-.024-.04-.087-.063-.2-.12-1.127-.563-1.074-.52-1.2-.763-.127-.24-.225-.564-.324-.764z"/>
             </svg>
             <span style="font-size:15px;font-weight:510;color:var(--text-2);">(33) 988738953</span>
           </div>
           <a href="https://wa.me/5533988738953" target="_blank" rel="noopener noreferrer"
-            style="display:inline-block;font-size:13px;font-weight:590;color:#fff;background:#25d366;padding:8px 20px;border-radius:8px;text-decoration:none;letter-spacing:-0.01em;transition:opacity 0.15s;"
+            style="display:inline-block;font-size:13px;font-weight:590;color:#fff;background:#25d366;padding:10px 20px;border-radius:8px;text-decoration:none;letter-spacing:-0.01em;transition:opacity 0.15s;"
             onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
             Fale Conosco
           </a>
@@ -244,6 +527,6 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/controllers/appController.js?v=5"></script>
+  <script type="module" src="js/controllers/appController.js?v=6"></script>
 </body>
 </html>

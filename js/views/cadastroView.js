@@ -7,8 +7,8 @@ const _btnHover = `onmouseover="this.style.background='var(--accent-h)'" onmouse
 
 export function renderCadastro(tipoPre = '', interessePre = '') {
   return `
-    <div style="display:flex;justify-content:center;padding:80px 0;">
-      <section style="${_card}">
+    <div class="auth-wrap" style="display:flex;justify-content:center;padding:80px 0;">
+      <section class="auth-card" style="${_card}">
         <h1 style="font-size:20px;font-weight:510;letter-spacing:-0.02em;color:var(--text-1);margin:0 0 6px;">Crie sua conta</h1>
         <p style="font-size:13px;color:var(--text-3);letter-spacing:-0.01em;margin:0 0 28px;">Junte-se à comunidade HACD-Hub gratuitamente.</p>
         <form id="form-cadastro" style="display:flex;flex-direction:column;gap:16px;">
@@ -30,8 +30,8 @@ export function renderCadastro(tipoPre = '', interessePre = '') {
 
 export function renderLogin() {
   return `
-    <div style="display:flex;justify-content:center;padding:80px 0;">
-      <section style="${_card}">
+    <div class="auth-wrap" style="display:flex;justify-content:center;padding:80px 0;">
+      <section class="auth-card" style="${_card}">
         <h1 style="font-size:20px;font-weight:510;letter-spacing:-0.02em;color:var(--text-1);margin:0 0 6px;">Entrar</h1>
         <p style="font-size:13px;color:var(--text-3);letter-spacing:-0.01em;margin:0 0 28px;">Bem-vindo de volta ao HACD-Hub.</p>
         <form id="form-login" style="display:flex;flex-direction:column;gap:16px;">
@@ -49,8 +49,8 @@ export function renderLogin() {
 
 export function renderRecuperarSenha() {
   return `
-    <div style="display:flex;justify-content:center;padding:80px 0;">
-      <section style="${_card}">
+    <div class="auth-wrap" style="display:flex;justify-content:center;padding:80px 0;">
+      <section class="auth-card" style="${_card}">
         <h1 style="font-size:20px;font-weight:510;letter-spacing:-0.02em;color:var(--text-1);margin:0 0 6px;">Recuperar senha</h1>
         <p style="font-size:13px;color:var(--text-3);letter-spacing:-0.01em;margin:0 0 28px;">Informe seu email e enviaremos as instruções de recuperação.</p>
         <form id="form-recuperar-senha" style="display:flex;flex-direction:column;gap:16px;">
